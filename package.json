@@ -1,0 +1,20 @@
+{
+  "name": "best-car-deals_backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node src/index.ts",
+    "start": "tsc && node build/index.js"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^21.1.7",
+    "@types/node": "^22.7.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2"
+  },
+  "dependencies": {
+    "jsdom": "^25.0.1",
+    "playwright": "^1.47.2"
+  }
+}
