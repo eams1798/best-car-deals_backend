@@ -4,10 +4,7 @@ import { E_RVType, EAutoBodyType, ECondition } from '../interfaces/craigslistTyp
 import { writeFileSync } from 'fs';
 
 const CAR_ITEM_CLASS = 'li.cl-search-result';
-/* const CLOSE_LOGIN_BUTTON_SELECTOR = "div[aria-label='Close']";
-const GOTO_LOCATION_SELECTOR = ".xod5an3 div#seo_filters > div[role='button']"; */
 
-""
 const removeDistanceFromCookies = (url: string): string => {
   const cookies = url.split('?')[1].split('#')[0].split('&').filter((item) => !item.includes('search_distance'));
   return cookies.join(`&`);
@@ -33,7 +30,6 @@ const extractCarInfo = (elements: Element[]): Car[] => {
     url: '.cl-gallery a',
     img: '.cl-gallery a img',
     title: '.gallery-card a span.label',
-    /* oldPrice: 'div > span.x78zum5 > .x78zum5 span.x1mnrxsn > span.x193iq5w', */
     newPrice: '.gallery-card span.priceinfo',
     monthlyPayment: '.gallery-card span.priceinfo span.monthly-pmt',
     locationAndMileage: '.gallery-card .meta',
@@ -43,20 +39,18 @@ const extractCarInfo = (elements: Element[]): Car[] => {
     const url = el.querySelector(selectors.url)?.getAttribute('href');
     const img = el.querySelector(selectors.img)?.getAttribute('src');
     const title = el.querySelector(selectors.title)?.textContent;
-    /* let oldPrice = el.querySelector(selectors.oldPrice)?.textContent; */
     let newPrice = el.querySelector(selectors.newPrice)?.textContent;
     let monthlyPayment = el.querySelector(selectors.monthlyPayment)?.textContent;
     const metadata = el.querySelector(selectors.locationAndMileage)?.textContent?.split('·');
     const mileage = metadata?.[1];
 
-    /* oldPrice = oldPrice === 'Free' ? '$0' : oldPrice; */
     newPrice = newPrice === 'Free' ? '$0' : newPrice;
 
     return {
+      source: 'Craigslist',
       url: url ?? '',
       img: img ?? '',
       title: title ?? '',
-      /* oldPrice: oldPrice ? Number(oldPrice.replace('$', '').replace(',', '')) : undefined, */
       newPrice: newPrice ? Number(newPrice.replace('$', '').replace(',', '')) : 0,
       monthlyPayment: monthlyPayment ? Number(monthlyPayment.replace('$', '').replace(',', '').replace('/mo', '')) : undefined,
       location: metadata?.[2] ?? '',
@@ -67,7 +61,7 @@ const extractCarInfo = (elements: Element[]): Car[] => {
   );
 };
 
-const craigslistScraper = async (location: string, filters?: CLCarFilters | CLRVFilters): Promise<Car[]> => {
+const craigslistScraper = async (filters?: CLCarFilters | CLRVFilters): Promise<Car[]> => {
   const cookies: string[] = [];
   let newFilters, carCategory ="cta";
   if (filters) {
@@ -100,12 +94,11 @@ const craigslistScraper = async (location: string, filters?: CLCarFilters | CLRV
   const page = await browser.newPage();
 
   await page.goto(`https://www.craigslist.org/search/${carCategory}`);
-  await gotoLocation(page, location);
+  await gotoLocation(page, filters?.location ?? 'San Francisco, CA');
   const newCookies = `${removeDistanceFromCookies(page.url())}&${cookies.join('&')}`;
   await page.goto(`${page.url().split('?')[0]}?${newCookies}`);
   await page.waitForSelector(CAR_ITEM_CLASS, { state: "attached" });
   await page.hover(".results.cl-results-page ol")
-  /* loop scrolling on li elements until reach bottom witha delay of 100ms each iteration */
   for (let i = 0; i < 14338; i += 332) {
     await page.waitForTimeout(5);
     await page.evaluate(() => {
@@ -120,15 +113,15 @@ const craigslistScraper = async (location: string, filters?: CLCarFilters | CLRV
 };
 
 // Example usage
-(async () => {
+/* (async () => {
   const cars = await craigslistScraper("Providence, RI", {
     vehicleType: 'trucks',
     sort: 'priceasc',
     search_distance: 12,
   });
 
-  writeFileSync('./scrapedData.ts', JSON.stringify(cars));
-})();
+  writeFileSync('./scrapedData.json', JSON.stringify(cars));
+})(); */
 
 export default craigslistScraper
 

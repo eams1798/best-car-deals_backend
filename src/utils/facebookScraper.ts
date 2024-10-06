@@ -1,5 +1,6 @@
 import { chromium, Page } from 'playwright';
 import { FBCarFilters as Filters, FoundCar as Car } from '../interfaces';
+import { writeFileSync } from 'fs';
 
 const CAR_ITEM_CLASS = '.x9f619.x78zum5.x1r8uery.xdt5ytf.x1iyjqo2.xs83m0k.x1e558r4.x150jy0e.x1iorvi4.xjkvuk6.xnpuxes.x291uyu.x1uepa24';
 const CLOSE_LOGIN_BUTTON_SELECTOR = "div[aria-label='Close']";
@@ -27,7 +28,7 @@ const filterByDistance = async (page: Page, distance: number) => {
     else if (distanceRanges[i] < distance && distance <= distanceRanges[i + 1]) {distanceToUse = distanceRanges[i + 1]; break;}
   }
   await page.click("label[aria-label='Radius'] div div")
-  await page.getByText(`${distanceToUse} miles`).click();
+  await page.getByLabel('Select an option').getByText(`${distanceToUse} miles`).click();
 }
 
 const extractCarInfo = (elements: Element[]): Car[] => {
@@ -53,15 +54,16 @@ const extractCarInfo = (elements: Element[]): Car[] => {
     newPrice = newPrice === 'Free' ? '$0' : newPrice;
 
     return {
+      source: 'Facebook',
       url: url ? `https://www.facebook.com${url}` : '',
       img: img ?? '',
       title: title ?? '',
       oldPrice: oldPrice ? Number(oldPrice.replace('$', '').replace(',', '')) : undefined,
       newPrice: newPrice ? Number(newPrice.replace('$', '').replace(',', '')) : 0,
       location: location ?? '',
-      mileage: mileage ? Number(mileage.replace('miles', '').replace('K', '000')) : 0,
+      mileage: mileage ? Number(mileage.replace('miles', '').replace('K', '000').replace(' · Dealership', '')) : 0,
     };
-  }).filter((car) => 
+  }).filter((car) =>
     !!car.url && !!car.title && !!car.newPrice && !!car.mileage
   );
 };
@@ -73,7 +75,7 @@ const removeOverlay = async (page: Page): Promise<void> => {
   });
 };
 
-const facebookScraper = async (location: string, filters?: Filters): Promise<Car[]> => {
+const facebookScraper = async (filters?: Filters): Promise<Car[]> => {
   const cookies: string[] = [];
   if (filters) {
     for (const [key, value] of Object.entries(filters)) {
@@ -90,7 +92,11 @@ const facebookScraper = async (location: string, filters?: Filters): Promise<Car
   const page = await browser.newPage();
   await page.goto(buildUrl(cookies));
 
-  await gotoLocation(page, location);
+  if (filters?.location) {
+    await gotoLocation(page, filters.location);
+  } else {
+    await gotoLocation(page, 'San Francisco, CA');
+  }
   await removeOverlay(page);
 
   if (filters?.distance) {
@@ -98,7 +104,8 @@ const facebookScraper = async (location: string, filters?: Filters): Promise<Car
   }
 
   await page.click("div[aria-label='Apply'] div");
-  await page.waitForTimeout(2500);
+  await page.getByLabel('Marketplace sidebar').getByText('Vehicles Near').waitFor();
+  /* await page.waitForTimeout(1000); */
 
   const cars = await page.$$eval(CAR_ITEM_CLASS, extractCarInfo);
   
@@ -107,13 +114,13 @@ const facebookScraper = async (location: string, filters?: Filters): Promise<Car
 };
 
 // Example usage
-(async () => {
+/* (async () => {
   const cars = await facebookScraper("Providence, RI", {
     carType: ['truck'],
     sortBy: 'vehicle_year_descend',
     distance: 12,
   });
-  console.log(cars);
-})();
+  writeFileSync('./scrapedData.json', JSON.stringify(cars));
+})(); */
 
 export default facebookScraper

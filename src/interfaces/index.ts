@@ -23,18 +23,21 @@ export interface Car {
 }
 
 export interface DefaultCarFilters {
-  source: 'Facebook' | 'Craigslist'; /*done*/
-  location: string; /*done*/
+  source?: ('Facebook' | 'Craigslist')[]; /*done*/
+  location?: string; /*done*/
+  reversed_sort?: boolean;
+
   distance?: number; /*done*/
-  sort?: string /*done*/
+  sort?: string; /*done*/
   sellerType?: string; /*done*/
   vehicleType?: string; /*done*/
-  bodyType?: string; /*done*/
+  bodyType?: string[];
+  rv_type?: string[];
   minPrice?: number; /*done*/
   maxPrice?: number; /*done*/
-  color?: string;
-  condition?: string;
-  transmissionType?: string; /*done*/
+  color?: string; /*done*/
+  condition?: string[]; /*done*/
+  transmission?: string; /*done*/
   make?: string; /*done*/
   model?: string; /*done*/
   minYear?: number; /*done*/
@@ -44,6 +47,7 @@ export interface DefaultCarFilters {
 }
 
 export interface FBCarFilters {
+  location?: string;
   distance?: number; /*done*/
   topLevelVehicleType?: FBTopLevelVehicleType; /*done*/
   carType?: FBCarType[]; /*done*/
@@ -57,15 +61,16 @@ export interface FBCarFilters {
   minYear?: number; /*done*/
   maxYear?: number; /*done*/
   minMileage?: number; /*done*/
+  maxMileage?: number; /*done*/
   interiorColor?: string;
   exteriorColor?: string; /*done*/
-  maxMileage?: number; /*done*/
   transmissionType?: string; /*done*/
   carFaxHistory?: ECarfaxHistory[];
   sortBy?: FBSortBy /*done*/
 }
 
 export interface FoundCar {
+  source: string;
   url: string;
   img?: string;
   title: string;
@@ -77,6 +82,7 @@ export interface FoundCar {
 }
 
 export interface CraigslistFiters {
+  location?: string;
   vehicleType?: "cars" | "trucks" | "rv-campers"; /*done*/
   purveyor?: "owner" | "dealer", /*done*/
   bundleDuplicates?: 0 | 1;
