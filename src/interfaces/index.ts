@@ -2,24 +2,35 @@ import { EAutoTransmission, EAutoDriveTrain, EAutoCylinders, ECondition, ELangua
 import { FBTopLevelVehicleType, FBCarType, FBSellerType, ECarfaxHistory, FBSortBy, FBCondition } from "./facebookTypes"
 
 export interface Car {
-  id: number;
-  make: string;
-  model: string;
-  year: number;
-  bodyType: string;
-  interiorColor: string;
-  exteriorColor: string;
-  price: number;
-  source: 'Facebook' | 'Craigslist' | 'Ebay';
-  image: string;
-  mileage: number;
-  transmission: string;
-  fuelType: string;
-  description: string;
-  deliveryMethod: string;
-  titleStatus: string;
-  location: string;
-  features: string[];
+  id?: number;
+  make?: string;
+  model?: string;
+  year?: number;
+  bodyType?: string;
+  interiorColor?: string;
+  exteriorColor?: string;
+  price?: number;
+  monthlyPayment?: number;
+  source?: 'Facebook' | 'Craigslist' | 'Ebay';
+  image?: string;
+  mileage?: number;
+  transmission?: string;
+  fuelType?: string;
+  description?: string;
+  deliveryMethod?: string;
+  titleStatus?: string;
+  location?: string;
+  features?: string[];
+  owners?: number;
+  safetyRate?: string;
+  title?: string;
+  color?: string;
+  MPG?: {
+    city?: number;
+    highway?: number;
+    combined?: number;
+  };
+  condition?: string;
 }
 
 export interface DefaultCarFilters {

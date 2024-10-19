@@ -3,7 +3,6 @@ import CraigslistScraper from './src/utils/craigslistScraper';
 import CraigslistFiltersParser from './src/utils/clFiltersParser';
 
 (async () => {
-  let location = "San Diego, CA";
   const json: DefaultCarFilters = {
     "sort": "default",
     "source": [
@@ -12,7 +11,7 @@ import CraigslistFiltersParser from './src/utils/clFiltersParser';
     ],
     "sellerType": "dealer",
     "distance": 32,
-    "location": "Foxboro, MA",
+    "location": "Nashua, NH",
     "vehicleType": "auto",
     "make": "mazda",
     "bodyType": [
@@ -26,6 +25,6 @@ import CraigslistFiltersParser from './src/utils/clFiltersParser';
   const craigslistFilters = CraigslistFiltersParser(json);
   console.log(craigslistFilters);
 
-  const craigslistData = await CraigslistScraper(json.location? json.location : location, craigslistFilters);
+  const craigslistData = await CraigslistScraper(craigslistFilters);
   console.log(craigslistData);
 })()

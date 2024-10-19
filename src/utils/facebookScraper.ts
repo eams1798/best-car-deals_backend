@@ -11,11 +11,20 @@ const buildUrl = (cookies: string[]): string => {
 };
 
 const gotoLocation = async (page: Page, location: string) => {
+  await page.waitForSelector(CLOSE_LOGIN_BUTTON_SELECTOR, { timeout: 6000 });
   await page.click(CLOSE_LOGIN_BUTTON_SELECTOR);
+
+  await page.waitForSelector(GOTO_LOCATION_SELECTOR, { timeout: 6000 });
   await page.click(GOTO_LOCATION_SELECTOR);
-  await page.waitForSelector("div[aria-label='Change location']", { state: "attached" });
+
+  await page.waitForSelector("div[aria-label='Change location']", { state: "attached", timeout: 6000 });
+
+  await page.waitForSelector("input[aria-label='Location']", { timeout: 6000 });
   await page.fill("input[aria-label='Location']", location);
-  await page.waitForSelector(".xu96u03 .x1jx94hy div ul", { state: "visible" });
+
+  await page.waitForSelector(".xu96u03 .x1jx94hy div ul", { state: "visible", timeout: 6000 });
+
+  await page.waitForSelector(".xu96u03 .x1jx94hy div ul li:first-child", { timeout: 6000 });
   await page.click(".xu96u03 .x1jx94hy div ul li:first-child");
 }
 
@@ -27,7 +36,10 @@ const filterByDistance = async (page: Page, distance: number) => {
     if (distanceRanges[i] === distance) {distanceToUse = distanceRanges[i]; break;}
     else if (distanceRanges[i] < distance && distance <= distanceRanges[i + 1]) {distanceToUse = distanceRanges[i + 1]; break;}
   }
+
+  await page.waitForSelector("label[aria-label='Radius'] div div", { timeout: 6000 });
   await page.click("label[aria-label='Radius'] div div")
+
   await page.getByLabel('Select an option').getByText(`${distanceToUse} miles`).click();
 }
 
@@ -103,7 +115,9 @@ const facebookScraper = async (filters?: Filters): Promise<Car[]> => {
     await filterByDistance(page, filters.distance);
   }
 
+  await page.waitForSelector("div[aria-label='Apply'] div", { timeout: 6000 });
   await page.click("div[aria-label='Apply'] div");
+
   await page.getByLabel('Marketplace sidebar').getByText('Vehicles Near').waitFor();
   /* await page.waitForTimeout(1000); */
 

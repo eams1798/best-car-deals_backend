@@ -5,6 +5,7 @@ import facebookScraper from './utils/facebookScraper';
 import { DefaultCarFilters, FoundCar } from './interfaces';
 import facebookFiltersParser from './utils/fbFiltersParser';
 import craigslistFiltersParser from './utils/clFiltersParser';
+import { stateMap } from './utils/stateMap';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -19,23 +20,56 @@ app.get('/', (req: Request, res: Response) => {
 app.post('/cars', async (req: Request, res: Response) => {
   try {
     const filters = req.body.filters;
-    console.log(filters);
-    console.log(filters.location);
-    
-    
-    /* const location = filters?.location || 'San Diego, CA'; */
 
     let craigslistPromise = Promise.resolve<FoundCar[]>([]);
     let facebookPromise = Promise.resolve<FoundCar[]>([]);
 
     if (filters.source?.includes('Craigslist') || !filters.source) {
-      craigslistPromise = craigslistScraper(craigslistFiltersParser(filters));
+      const parsedFilters = craigslistFiltersParser(filters);
+      try {
+        craigslistPromise = craigslistScraper(parsedFilters);
+      } catch (e) {
+        if (parsedFilters.location) {
+          const [city, state] = parsedFilters.location.split(', ')
+          let newLocation = city + ', ' + stateMap[state]
+          craigslistPromise = craigslistScraper({
+          ...parsedFilters,
+          location: newLocation,
+        })}
+      }
     }
     if (filters.source?.includes('Facebook') || !filters.source) {
-      facebookPromise = facebookScraper( facebookFiltersParser(filters));
+      const parsedFilters = facebookFiltersParser(filters);
+      try {
+        facebookPromise = facebookScraper(parsedFilters);
+      } catch (e) {
+        if (parsedFilters.location) {
+          let [city, state] = parsedFilters.location.split(', ')
+          const newLocation = city + ', ' + stateMap[state]
+          console.log('newLocation: ', newLocation);
+          
+          facebookPromise = facebookScraper({
+          ...parsedFilters,
+          location: newLocation,
+        })
+      }
     }
 
-    const [craigslistData, facebookData] = await Promise.all([craigslistPromise, facebookPromise]);
+    let craigslistData: FoundCar[] = [], facebookData: FoundCar[] = [];
+    try {
+      [craigslistData, facebookData] = await Promise.all([craigslistPromise, facebookPromise]);
+    } catch (e) {
+      if (parsedFilters.location) {
+        let [city, state] = parsedFilters.location.split(', ')
+        const newLocation = city + ', ' + stateMap[state]
+        console.log('newLocation: ', newLocation);
+        
+        [craigslistData, facebookData] = await Promise.all([craigslistPromise, facebookScraper({
+          ...parsedFilters,
+          location: newLocation,
+        })]);
+      }
+    }
 
     let combinedData: FoundCar[] = [];
 
@@ -76,9 +110,10 @@ app.post('/cars', async (req: Request, res: Response) => {
     }
 
     res.json(combinedData);
-  } catch (error) {
-    console.error('Error processing car data:', error);
-    res.status(500).json({ error: 'An error occurred while processing car data' });
+  }}
+  catch (e) {
+    console.log(e);
+    res.status(500).send('Internal Server Error');
   }
 });
 

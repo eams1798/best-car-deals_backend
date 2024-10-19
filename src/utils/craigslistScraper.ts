@@ -11,17 +11,30 @@ const removeDistanceFromCookies = (url: string): string => {
 }
 
 const gotoLocation = async (page: Page, location: string) => {
+  await page.waitForSelector(".cl-header .cl-left-group .cl-breadcrumb", { timeout: 6000 });
   await page.click(".cl-header .cl-left-group .cl-breadcrumb");
-  await page.waitForSelector(".bd-for-bd-combo-box.bd-list-box.below div .items", { state: "attached" });
-  await page.getByText("use map...").click();
-  await page.waitForSelector(".cl-clickable-scrim .cl-popup-panel.fit-to-content.in-box", { state: "attached" });
+
+  await page.waitForSelector(".bd-for-bd-combo-box.bd-list-box.below div .items", { state: "attached", timeout: 6000 });
+
+  await page.waitForSelector(".bd-button.text-only.use-map.link-like span", { timeout: 6000 });
+  await page.click(".bd-button.text-only.use-map.link-like span")
+
+  await page.waitForSelector(".cl-clickable-scrim .cl-popup-panel.fit-to-content.in-box", { state: "attached", timeout: 6000 });
+
+  await page.waitForSelector("input[placeholder='city or zip/postal code']", { timeout: 6000 });
   await page.fill("input[placeholder='city or zip/postal code']", location);
+
   await page.keyboard.press('Backspace');
   await page.keyboard.press(`${location.at(-1)}`);
-  await page.waitForSelector(".cl-search-dropdown-results", { state: "visible" });
+
+  await page.waitForSelector(".cl-search-dropdown-results", { state: "visible", timeout: 6000 });
+
   await page.keyboard.press('Enter');
   await page.waitForTimeout(4500);
+
+  await page.waitForSelector(".apply-button", { timeout: 6000 });
   await page.click(".apply-button")
+
   await page.waitForTimeout(1500);
 }
 
@@ -97,7 +110,10 @@ const craigslistScraper = async (filters?: CLCarFilters | CLRVFilters): Promise<
   await gotoLocation(page, filters?.location ?? 'San Francisco, CA');
   const newCookies = `${removeDistanceFromCookies(page.url())}&${cookies.join('&')}`;
   await page.goto(`${page.url().split('?')[0]}?${newCookies}`);
-  await page.waitForSelector(CAR_ITEM_CLASS, { state: "attached" });
+
+  await page.waitForSelector(CAR_ITEM_CLASS, { state: "attached", timeout: 6000 });
+
+  await page.waitForSelector(".results.cl-results-page ol", { timeout: 6000 });
   await page.hover(".results.cl-results-page ol")
   for (let i = 0; i < 14338; i += 332) {
     await page.waitForTimeout(5);
