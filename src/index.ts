@@ -6,6 +6,8 @@ import { DefaultCarFilters, FoundCar } from './interfaces';
 import facebookFiltersParser from './utils/fbFiltersParser';
 import craigslistFiltersParser from './utils/clFiltersParser';
 import { stateMap } from './utils/stateMap';
+import { FBCarItemScraper } from './utils/FBCarItemScraper';
+import { CLCarItemScraper } from './utils/CLCarItemScraper';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -116,6 +118,18 @@ app.post('/cars', async (req: Request, res: Response) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
+app.post('/facebook', async (req: Request, res: Response) => {
+  const url = req.body.url;
+  const car = await FBCarItemScraper(url);
+  res.json(car);
+})
+
+app.post('/craigslist', async (req: Request, res: Response) => {
+  const url = req.body.url;
+  const car = await CLCarItemScraper(url);
+  res.json(car);
+})
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

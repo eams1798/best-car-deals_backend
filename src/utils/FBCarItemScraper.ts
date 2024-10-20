@@ -65,6 +65,7 @@ const getCarData = async (page: Page): Promise<Car> => {
   try {
     await page.locator(CAR_TRANSMISSION_SELECTOR).getByText("Transmission").waitFor({ timeout: 50 });
     transmission = await page.locator(CAR_TRANSMISSION_SELECTOR).getByText("transmission").innerText()
+    transmission = transmission.replace("transmission", "").trim();
   } catch {
     transmission = "";
   }
@@ -83,6 +84,7 @@ const getCarData = async (page: Page): Promise<Car> => {
   try {
     await page.locator(CAR_FUEL_TYPE_SELECTOR).getByText("Fuel Type").waitFor({ timeout: 50 });
     fuelType = await page.locator(CAR_FUEL_TYPE_SELECTOR).getByText("Fuel Type").innerText()
+    fuelType = fuelType.replace("Fuel type: ", "").trim();
   } catch {
     fuelType = "";
   }
@@ -158,7 +160,6 @@ export const FBCarItemScraper = async (url: string): Promise<Car> => {
   await page.click(CLOSE_LOGIN_BUTTON_SELECTOR);
 
   const car = await getCarData(page);
-
               
   await browser.close();
 
