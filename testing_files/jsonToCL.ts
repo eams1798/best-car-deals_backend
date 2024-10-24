@@ -1,6 +1,6 @@
-import { DefaultCarFilters } from './src/interfaces';
-import CraigslistScraper from './src/utils/craigslistScraper';
-import CraigslistFiltersParser from './src/utils/clFiltersParser';
+import { DefaultCarFilters } from '../src/interfaces';
+import CraigslistScraper from '../src/utils/craigslistScraper';
+import CraigslistFiltersParser from '../src/utils/clFiltersParser';
 
 (async () => {
   const json: DefaultCarFilters = {

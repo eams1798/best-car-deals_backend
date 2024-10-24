@@ -1,13 +1,21 @@
+import dotenv from "dotenv";
+import Anthropic from '@anthropic-ai/sdk';
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import craigslistScraper from './utils/craigslistScraper';
 import facebookScraper from './utils/facebookScraper';
-import { DefaultCarFilters, FoundCar } from './interfaces';
+import { Car, DefaultCarFilters, FoundCar } from './interfaces';
 import facebookFiltersParser from './utils/fbFiltersParser';
 import craigslistFiltersParser from './utils/clFiltersParser';
 import { stateMap } from './utils/stateMap';
 import { FBCarItemScraper } from './utils/FBCarItemScraper';
 import { CLCarItemScraper } from './utils/CLCarItemScraper';
+
+dotenv.config();
+
+const anthropic = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+});
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -129,6 +137,19 @@ app.post('/craigslist', async (req: Request, res: Response) => {
   const url = req.body.url;
   const car = await CLCarItemScraper(url);
   res.json(car);
+})
+
+app.post('/ai-info', async (req: Request, res: Response) => {
+  const data: Car = req.body;
+  const msg = ((await anthropic.messages.create({
+    model: "claude-3-5-sonnet-20241022",
+    max_tokens: 512,
+    messages: [{
+      role: "user",
+      content: `How reliable is this car on the market? Is it easy to repair? What future problems might it have? Give me a brief summary of NHTSA and customer reviews. ${JSON.stringify(data)}`,}],
+  })).content[0] as any).text;
+  
+  res.json({ text: msg });
 })
 
 app.listen(port, () => {

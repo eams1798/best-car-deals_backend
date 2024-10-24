@@ -1,7 +1,7 @@
-import { DefaultCarFilters } from './src/interfaces';
-import facebookScraper from './src/utils/facebookScraper';
-import facebookFiltersParser from './src/utils/fbFiltersParser';
-import { stateMap } from './src/utils/stateMap';
+import { DefaultCarFilters } from '../src/interfaces';
+import facebookScraper from '../src/utils/facebookScraper';
+import facebookFiltersParser from '../src/utils/fbFiltersParser';
+import { stateMap } from '../src/utils/stateMap';
 
 (async () => {
   let location = "San Diego, CA";
