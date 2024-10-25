@@ -119,6 +119,7 @@ const getCarData = async (page: Page): Promise<Car> => {
   }
 
   const carItem: Car = {
+    url: page.url(),
     year: Number(year),
     title,
     condition,

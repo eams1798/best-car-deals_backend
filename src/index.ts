@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import Anthropic from '@anthropic-ai/sdk';
+import { StreamingTextResponse } from "ai";
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import craigslistScraper from './utils/craigslistScraper';
@@ -141,15 +142,27 @@ app.post('/craigslist', async (req: Request, res: Response) => {
 
 app.post('/ai-info', async (req: Request, res: Response) => {
   const data: Car = req.body;
-  const msg = ((await anthropic.messages.create({
+  const stream = await anthropic.messages.create({
     model: "claude-3-5-sonnet-20241022",
     max_tokens: 512,
     messages: [{
       role: "user",
       content: `How reliable is this car on the market? Is it easy to repair? What future problems might it have? Give me a brief summary of NHTSA and customer reviews. ${JSON.stringify(data)}`,}],
-  })).content[0] as any).text;
-  
-  res.json({ text: msg });
+      stream: true
+  });
+
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+
+  for await (const chunk of stream) {
+    if (chunk.type === 'content_block_delta') {
+      res.write(`data: ${JSON.stringify((chunk.delta as any).text)}\n\n`);
+    }
+  }
+
+  res.write('data: [DONE]\n\n');
+  res.end();
 })
 
 app.listen(port, () => {

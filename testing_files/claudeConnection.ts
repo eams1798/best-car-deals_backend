@@ -8,12 +8,22 @@ const anthropic = new Anthropic({
 });
 
 async function main() {
-  const msg = await anthropic.messages.create({
+  const stream = await anthropic.messages.create({
     model: "claude-3-5-sonnet-20241022",
     max_tokens: 1024,
     messages: [{ role: "user", content: "Qué información de un auto usado es relevante para saber si es buena idea comprarlo y que resulte estar en buenas condiciones?" }],
+    stream: true
   });
-  console.log(msg);
+
+  let message = "";
+  
+  for await (const messageStreamEvent of stream) {
+    if (messageStreamEvent.type === "content_block_delta") {
+      message += (messageStreamEvent.delta as any).text
+      console.log('message: ', message);
+      console.log('-------------------------------');
+    }
+  }
 }
 
 main();

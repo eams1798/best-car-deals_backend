@@ -2,6 +2,7 @@ import { EAutoTransmission, EAutoDriveTrain, EAutoCylinders, ECondition, ELangua
 import { FBTopLevelVehicleType, FBCarType, FBSellerType, ECarfaxHistory, FBSortBy, FBCondition } from "./facebookTypes"
 
 export interface Car {
+  url?: string;
   id?: number;
   make?: string;
   model?: string;
