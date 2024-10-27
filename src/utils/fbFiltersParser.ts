@@ -94,9 +94,6 @@ const facebookFiltersParser = (filters: DefaultCarFilters): FBCarFilters => {
   if (filters.maxMileage) newFilters.maxMileage = filters.maxMileage;
   if (filters.color) newFilters.exteriorColor = filters.color;
 
-/*   console.log('Filters: ', filters);
-  console.log('New Filters: ', newFilters); */
-
   return newFilters;
 }
 

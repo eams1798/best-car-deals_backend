@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon src/index.ts",
+    "dev:debug": "nodemon --config nodemon.json --inspect src/index.ts",
     "start": "tsc && node build/index.js"
   },
   "devDependencies": {

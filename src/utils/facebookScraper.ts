@@ -121,10 +121,10 @@ const facebookScraper = async (filters?: Filters): Promise<Car[]> => {
   await page.getByLabel('Marketplace sidebar').getByText('Vehicles Near').waitFor();
   /* await page.waitForTimeout(1000); */
 
-  const cars = await page.$$eval(CAR_ITEM_CLASS, extractCarInfo);
+  const cars = await page.$$eval(CAR_ITEM_CLASS, extractCarInfo);  
   
   await browser.close();
-  return cars;
+  return [...new Set(cars)];
 };
 
 // Example usage

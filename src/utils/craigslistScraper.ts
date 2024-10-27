@@ -123,9 +123,9 @@ const craigslistScraper = async (filters?: CLCarFilters | CLRVFilters): Promise<
   }
 
   const cars = await page.$$eval(CAR_ITEM_CLASS, extractCarInfo);
-  
+
   await browser.close();
-  return cars;
+  return [...new Set(cars)];
 };
 
 // Example usage

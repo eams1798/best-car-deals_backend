@@ -114,10 +114,6 @@ const craigslistFiltersParser = (filters: DefaultCarFilters): CLCarFilters | CLR
   if (filters.maxMileage) newFilters.max_auto_miles = filters.maxMileage;
   if (filters.distance) newFilters.search_distance = filters.distance;
 
-/*   console.log('Filters: ', filters);
-  console.log('New Filters: ', newFilters); */
-  
-
   return newFilters;
 };
 
