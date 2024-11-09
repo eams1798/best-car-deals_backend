@@ -152,9 +152,8 @@ export const CLCarItemScraper = async (url: string): Promise<Car> => {
 
 /* (async () => {
   const url = `
-https://allentown.craigslist.org/ctd/d/walnutport-2012-ram-1500-crew-cab-4x4/7788243667.html`
+https://providence.craigslist.org/ctd/d/hyannis-2015-audi-a4/7800456160.html`
 
 const car = await CLCarItemScraper(url);
   console.log(car);
-})()
- */
+})() */

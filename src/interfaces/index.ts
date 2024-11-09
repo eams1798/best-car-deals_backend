@@ -32,6 +32,7 @@ export interface Car {
     combined?: number;
   };
   condition?: string;
+  meta?: string
 }
 
 export interface DefaultCarFilters {
