@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "nodemon src/index.ts",
     "dev:debug": "nodemon --config nodemon.json --inspect src/index.ts",
-    "start": "tsc && node build/index.js"
+    "build": "rm -rf build && tsc",
+    "start": "node build/index.js",
+    "deploy": "yarn build && rsync -avz --exclude .git --exclude testing_files ./ root@185.28.22.245:/var/www/html/backend"
   },
   "devDependencies": {
     "@types/jsdom": "^21.1.7",

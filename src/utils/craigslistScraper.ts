@@ -48,13 +48,20 @@ const extractCarInfo = (elements: Element[]): Car[] => {
     locationAndMileage: '.gallery-card .meta',
   };
 
+  console.log("is it working?");
+
   return elements.map((el) => {
     const url = el.querySelector(selectors.url)?.getAttribute('href');
     const img = el.querySelector(selectors.img)?.getAttribute('src');
     const title = el.querySelector(selectors.title)?.textContent;
     let newPrice = el.querySelector(selectors.newPrice)?.textContent;
     let monthlyPayment = el.querySelector(selectors.monthlyPayment)?.textContent;
-    const metadata = el.querySelector(selectors.locationAndMileage)?.textContent?.split('·');
+    const metadata = el.querySelector(selectors.locationAndMileage)?.outerHTML
+                                                                    .replace('<div class="meta">', '').replace('</div>', '')
+                                                                    .replace('<span class="separator"></span>', '·')
+                                                                    .replace('<span class="separator"></span>', '·')
+                                                                    .split('·');
+
     const mileage = metadata?.[1];
 
     newPrice = newPrice === 'Free' ? '$0' : newPrice;
@@ -102,7 +109,7 @@ const craigslistScraper = async (filters?: CLCarFilters | CLRVFilters): Promise<
       }
     }
   }
-
+  
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
 
@@ -122,21 +129,22 @@ const craigslistScraper = async (filters?: CLCarFilters | CLRVFilters): Promise<
     });
   }
 
-  const cars = await page.$$eval(CAR_ITEM_CLASS, extractCarInfo);
+  let carLocator = page.locator(CAR_ITEM_CLASS)
+  const elements = await carLocator.evaluateAll(extractCarInfo);
 
   await browser.close();
-  return [...new Set(cars)];
+  return elements
 };
 
 // Example usage
 /* (async () => {
-  const cars = await craigslistScraper("Providence, RI", {
+  const cars =await craigslistScraper({
     vehicleType: 'trucks',
     sort: 'priceasc',
     search_distance: 12,
   });
 
-  writeFileSync('./scrapedData.json', JSON.stringify(cars));
+  console.log(cars);
 })(); */
 
 export default craigslistScraper
