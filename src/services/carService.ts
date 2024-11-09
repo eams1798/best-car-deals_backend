@@ -16,9 +16,9 @@ interface CarFilters {
 /* TODO */
 
 export const fetchCraigslistData = async (filters: DefaultCarFilters): Promise<FoundCar[]> => {
-  /* if (!filters.source?.includes('Craigslist') && filters.source) {
+  if (!filters.source?.includes('Craigslist') && filters.source) {
     return [];
-  } */
+  }
 
   const parsedFilters = craigslistFiltersParser(filters);
   

@@ -21,14 +21,14 @@ router.post('/cars', async (req: Request, res: Response) => {
     console.log('filters: ', filters);
 
     /* TODO */
-    const [craigslistData, /* facebookData */] = await Promise.all([
+    const [craigslistData, facebookData] = await Promise.all([
       fetchCraigslistData(filters),
-      /* fetchFacebookData(filters) */
+      fetchFacebookData(filters)
     ]);
 
     const combinedData = combineAndSortData(
       craigslistData, 
-      /* [facebookData] */[], 
+      facebookData, 
       filters.sort, 
       filters.reversed_sort
     );
