@@ -92,30 +92,23 @@ VITE_GOOGLE_MAPS_API_KEY=YOUR_GOOGLE_MAPS_API_KEY
 
 ## How to use the app
 1. Using the main page to start searching for cars with basic filters.
-<video src="https://github.com/eams1798/projects-resources/raw/refs/heads/main/best_car_deals_README/vid1.mp4" controls>
-    Your browser does not support the video tag.
-</video>
+
+![Demo GIF](https://github.com/eams1798/projects-resources/blob/main/best_car_deals_README/gif1.gif)
+
 
 2. Clicking on a car to view all the information about the car, and using the AI feature for tips.
-<video src="https://github.com/eams1798/projects-resources/raw/refs/heads/main/best_car_deals_README/vid2.mp4" controls>
-    Your browser does not support the video tag.
-</video>
+
+![Demo GIF](https://github.com/eams1798/projects-resources/blob/main/best_car_deals_README/gif2.gif)
 
 3. Using the sort controls and the reverse checkbox.
-<video src="https://github.com/eams1798/projects-resources/raw/refs/heads/main/best_car_deals_README/vid3.mp4" controls>        
-    Your browser does not support the video tag.
-</video>
-<video src="https://github.com/eams1798/projects-resources/raw/refs/heads/main/best_car_deals_README/vid4.mp4" controls>
-    Your browser does not support the video tag.
-</video>
+
+![Demo GIF](https://github.com/eams1798/projects-resources/blob/main/best_car_deals_README/gif3.gif)
+![Demo GIF](https://github.com/eams1798/projects-resources/blob/main/best_car_deals_README/gif4.gif)
 
 4. Using the filters sidebar.
-<video src="https://github.com/eams1798/projects-resources/raw/refs/heads/main/best_car_deals_README/vid5.mp4" controls>
-    Your browser does not support the video tag.
-</video>
-<video src="https://github.com/eams1798/projects-resources/raw/refs/heads/main/best_car_deals_README/vid6.mp4" controls>
-    Your browser does not support the video tag.
-</video>
+
+![Demo GIF](https://github.com/eams1798/projects-resources/blob/main/best_car_deals_README/gif5.gif)
+![Demo GIF](https://github.com/eams1798/projects-resources/blob/main/best_car_deals_README/gif6.gif)
 
 
 ## Deployment
