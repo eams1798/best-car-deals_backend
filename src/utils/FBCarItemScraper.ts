@@ -160,6 +160,8 @@ export const FBCarItemScraper = async (url: string): Promise<Car> => {
   await page.waitForSelector(CLOSE_LOGIN_BUTTON_SELECTOR, { timeout: 6000 });
   await page.click(CLOSE_LOGIN_BUTTON_SELECTOR);
 
+  await page.waitForTimeout(100);
+
   const car = await getCarData(page);
               
   await browser.close();
