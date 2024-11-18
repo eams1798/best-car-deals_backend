@@ -23,6 +23,8 @@ export const fetchCraigslistData = async (filters: DefaultCarFilters): Promise<F
   const parsedFilters = craigslistFiltersParser(filters);
   
   try {
+    console.log('location: ', parsedFilters.location);
+    
     return await craigslistScraper(parsedFilters);
   } catch (e) {
     if (parsedFilters.location) {

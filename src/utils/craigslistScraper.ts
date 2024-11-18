@@ -3,7 +3,7 @@ import { CLCarFilters, CLRVFilters, FoundCar as Car } from '../interfaces';
 import { E_RVType, EAutoBodyType, ECondition } from '../interfaces/craigslistTypes';
 import { writeFileSync } from 'fs';
 
-const CAR_ITEM_CLASS = 'li.cl-search-result';
+const CAR_ITEM_CLASS = '.cl-search-result';
 
 const removeDistanceFromCookies = (url: string): string => {
   const cookies = url.split('?')[1].split('#')[0].split('&').filter((item) => !item.includes('search_distance'));
@@ -118,7 +118,7 @@ const craigslistScraper = async (filters?: CLCarFilters | CLRVFilters): Promise<
   const newCookies = `${removeDistanceFromCookies(page.url())}&${cookies.join('&')}`;
   await page.goto(`${page.url().split('?')[0]}?${newCookies}`);
 
-  await page.waitForSelector(CAR_ITEM_CLASS, { state: "attached", timeout: 6000 });
+  await page.waitForSelector(CAR_ITEM_CLASS, { state: "attached", timeout: 120000 });
 
   await page.waitForSelector(".results.cl-results-page ol", { timeout: 6000 });
   await page.hover(".results.cl-results-page ol")

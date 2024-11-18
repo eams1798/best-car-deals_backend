@@ -90,25 +90,25 @@ VITE_GOOGLE_MAPS_API_KEY=YOUR_GOOGLE_MAPS_API_KEY
 ```
 7. Use `yarn dev` on each directory if you want to run them locally, or `yarn start` if you want to run them on production mode.
 
-## How to use the app
+## How to use the app (click on the images to open the video)
 1. Using the main page to start searching for cars with basic filters.
 
-![Demo GIF](https://github.com/eams1798/projects-resources/blob/main/best_car_deals_README/gif1.gif)
+[![Main page](https://github.com/eams1798/projects-resources/blob/main/best_car_deals_README/thumbnail1.png)](https://drive.google.com/file/d/1TFWGEmUjUASqgrVvfcE1rSmXMEhc9tj3/view?usp=drive_link)
 
 
 2. Clicking on a car to view all the information about the car, and using the AI feature for tips.
 
-![Demo GIF](https://github.com/eams1798/projects-resources/blob/main/best_car_deals_README/gif2.gif)
+[![Car info](https://github.com/eams1798/projects-resources/blob/main/best_car_deals_README/thumbnail2.png)](https://drive.google.com/file/d/1ejD8-sTeXiNEUOxPgKjt4v_ZNB6EUdvf/view?usp=drive_link)
 
 3. Using the sort controls and the reverse checkbox.
 
-![Demo GIF](https://github.com/eams1798/projects-resources/blob/main/best_car_deals_README/gif3.gif)
-![Demo GIF](https://github.com/eams1798/projects-resources/blob/main/best_car_deals_README/gif4.gif)
+[![Sort controls](https://github.com/eams1798/projects-resources/blob/main/best_car_deals_README/thumbnail3.png)](https://drive.google.com/file/d/1UaTDZeqQgXkjsQqpJvKySmlYR9I_U7dg/view?usp=drive_link)
+[![Reverse checkbox](https://github.com/eams1798/projects-resources/blob/main/best_car_deals_README/thumbnail4.png)](https://drive.google.com/file/d/1jrfI5M9WE7HKAmDJRRzH7tlR1DZbmoUC/view?usp=drive_link)
 
 4. Using the filters sidebar.
 
-![Demo GIF](https://github.com/eams1798/projects-resources/blob/main/best_car_deals_README/gif5.gif)
-![Demo GIF](https://github.com/eams1798/projects-resources/blob/main/best_car_deals_README/gif6.gif)
+[![Filters sidebar 1](https://github.com/eams1798/projects-resources/blob/main/best_car_deals_README/thumbnail5.png)](https://drive.google.com/file/d/1EJVej4Z9wwkei6l06rweX1kO99UL9AMR/view?usp=drive_link)
+[![Filters sidebar 2](https://github.com/eams1798/projects-resources/blob/main/best_car_deals_README/thumbnail6.png)](https://drive.google.com/file/d/1_RvtVHqdjCE5UV2nr81E1R0TqLx9B6nV/view?usp=drive_link)
 
 
 ## Deployment
