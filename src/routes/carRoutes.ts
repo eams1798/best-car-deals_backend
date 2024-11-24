@@ -4,7 +4,7 @@ import {
   fetchFacebookData, 
   combineAndSortData 
 } from '../services/carService';
-import { getCarAnalysis } from '../services/aiService';
+import { getCarAnalysis, getCarGeminiAnalysis } from '../services/aiService';
 import { FBCarItemScraper } from '../utils/FBCarItemScraper';
 import { CLCarItemScraper } from '../utils/CLCarItemScraper';
 import { Car, DefaultCarFilters } from '../interfaces';
@@ -111,5 +111,30 @@ router.post('/ai-info', async (req: Request, res: Response) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
+router.post('/gemini', async (req: Request, res: Response) => {
+  let data: Car = req.body;
+  data.url = undefined;
+  
+  try {
+    const result = await getCarGeminiAnalysis(data);
+
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+
+    for await (const chunk of result.stream) {
+      const chunkText = chunk.text();
+      res.write(`${chunkText}`);
+    }
+
+    res.write('stream: [DONE]');
+    res.end();
+  } catch (e) {
+    console.error(e);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 
 export default router;

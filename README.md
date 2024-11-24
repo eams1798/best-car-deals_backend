@@ -17,7 +17,7 @@ Backend:
 - [Node.js](https://nodejs.org/)
 - [Express](https://expressjs.com/)
 - [Playwright](https://playwright.dev/)
-- [Claude AI](https://docs.anthropic.com/en/home)
+- [Google Gemini AI](https://ai.google.dev/)
 
 ## Project structure
 
@@ -38,6 +38,7 @@ The project is structured in the following way:
 - [`src/components/MarketPlace/CarList.tsx`](https://github.com/eams1798/best-car-deals/blob/main/src/components/MarketPlace/CarList.tsx): Component for the list of the filtered cars.
 - [`src/components/MarketPlace/CarItem.tsx`](https://github.com/eams1798/best-car-deals/blob/main/src/components/MarketPlace/CarItem.tsx): Component for each car item in the list. Contains a card with a brief information about the car such as image, title, price, mileage and location.
 - [`src/components/MarketPlace/CLCarElement.tsx`](https://github.com/eams1798/best-car-deals/blob/main/src/components/MarketPlace/CLCarElement.tsx) and [`src/components/MarketPlace/FBCarElement.tsx`](https://github.com/eams1798/best-car-deals/blob/main/src/components/MarketPlace/FBCarElement.tsx): Components with the complete car information scraped from Craigslist or Facebook respectively. You can get additional information by clicking on the "Get tips by Claude AI" button to see if the car is worth buying.
+- [`src/components/MarketPlace/AITips.tsx`](https://github.com/eams1798/best-car-deals/blob/main/src/components/MarketPlace/AITips.tsx): Component to show additional information about the car provied by Gemini, the Google AI model.
 - `src/interfaces` folder: Contains the interfaces for the frontend.
 - [`src/services/cars.ts`](https://github.com/eams1798/best-car-deals/blob/main/src/services/cars.ts): Contains the functions to fetch the cars from the different sources.
 - [`src/utils/parseLocation.ts`](https://github.com/eams1798/best-car-deals/blob/main/src/utils/parseLocation.ts): Contains the function to parse the location from the Google Maps API response. Useful to give the correct format to the request depending on the source.
@@ -77,13 +78,12 @@ yarn install
 yarn playwright install
 yarn playwright install-deps chromium
 ```
-
-3. Create an Anthropic account and get an API key. You can follow the steps listed [here](https://docs.anthropic.com/en/docs/initial-setup).
-4. On the root of the backend directory, create a .env file with the following variable:
+3. Create a Google Cloud account, start a new project and get a Maps API key. You can follow the steps listed [here](https://developers.google.com/maps/documentation/javascript/places). You will need a Billing account to use all the Google APIs.
+4. Now go to [https://ai.google.dev/](https://ai.google.dev/) and follow the steps to get a new API key for Gemini.
+5. On the root of the backend directory, create a .env file with the following variable:
 ```
-ANTHROPIC_API_KEY=YOUR_ANTHROPIC_API_KEY
+GEMINI_API_KEY=YOUR_GEMINI_API_KEY
 ```
-5. Create a Google Cloud account, start a new project and get a Maps API key. You can follow the steps listed [here](https://developers.google.com/maps/documentation/javascript/places).
 6. On the root of the frontend directory, create a .env file with the following variable:
 ```
 VITE_GOOGLE_MAPS_API_KEY=YOUR_GOOGLE_MAPS_API_KEY
