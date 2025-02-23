@@ -22,10 +22,7 @@ export async function getCarAnalysis(car: Car) {
 export async function getCarGeminiAnalysis(car: Car) {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
   const model = genAI.getGenerativeModel({
-    model: "gemini-1.5-flash",
-    generationConfig: {
-      maxOutputTokens: 512
-    }
+    model: "gemini-1.5-flash"
   });
   
   const prompt = `How reliable is this car on the market? Is it easy to repair? What future problems might it have? Give me a brief summary of customer reviews and where can I find more information about the car model? ${JSON.stringify(car)}`;

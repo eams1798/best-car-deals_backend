@@ -128,7 +128,7 @@ router.post('/gemini', async (req: Request, res: Response) => {
       res.write(`${chunkText}`);
     }
 
-    res.write('stream: [DONE]');
+    res.write('\n');
     res.end();
   } catch (e) {
     console.error(e);

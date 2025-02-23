@@ -59,6 +59,27 @@ export interface DefaultCarFilters {
   maxMileage?: number;
 }
 
+// TODO: add more filters
+
+export interface CarsDotComFilters {
+  zip?: number;
+  maximum_distance?: number;
+  dealer_id?: number;
+  include_shippable?: boolean;
+  keyword?: string;
+  list_price_max?: number;
+  list_price_min?: number;
+  "makes[]"?: string;
+  "models[]"?: string;
+  "seller_type[]"?: "dealership" | "private_seller";
+  mileage_max?: number;
+  monthly_payment?: number;
+  sort?: string;
+  stock_type?: string;
+  year_max?: number;
+  year_min?: number;
+}
+
 export interface FBCarFilters {
   location?: string;
   distance?: number;
