@@ -120,8 +120,8 @@ const craigslistScraper = async (filters?: CLCarFilters | CLRVFilters): Promise<
 
   await page.waitForSelector(CAR_ITEM_CLASS, { state: "attached", timeout: 120000 });
 
-  await page.waitForSelector(".results.cl-results-page ol", { timeout: 6000 });
-  await page.hover(".results.cl-results-page ol")
+  await page.waitForSelector(".scrolling-container", { timeout: 6000 });
+  await page.hover(".scrolling-container")
   for (let i = 0; i < 14338; i += 332) {
     await page.waitForTimeout(5);
     await page.evaluate(() => {
