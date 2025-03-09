@@ -2,8 +2,6 @@ import { DefaultCarFilters, FBCarFilters } from "../interfaces"
 import { FBCarType, FBCondition } from "../interfaces/facebookTypes";
 
 const facebookFiltersParser = (filters: DefaultCarFilters): FBCarFilters => {
-  console.log('Filters: ', filters);
-  
   let newFilters: FBCarFilters = {};
   if (filters.sort) {
     switch (filters.sort) {

@@ -1,5 +1,6 @@
 import { EAutoTransmission, EAutoDriveTrain, EAutoCylinders, ECondition, ELanguage, E_RVType, EAutoPaint, EAutoTitleStatus, EAutoFuelType, EAutoBodyType } from "./craigslistTypes"
 import { FBTopLevelVehicleType, FBCarType, FBSellerType, ECarfaxHistory, FBSortBy, FBCondition } from "./facebookTypes"
+import { CDCFuelType, CDCDrivetrain, CDCTransmission, CDCBodystyle, CDCSellerType, CDCSortBy } from "./carsDCTypes"
 
 export interface Car {
   url?: string;
@@ -59,8 +60,6 @@ export interface DefaultCarFilters {
   maxMileage?: number;
 }
 
-// TODO: add more filters
-
 export interface CarsDotComFilters {
   zip?: number;
   maximum_distance?: number;
@@ -69,12 +68,17 @@ export interface CarsDotComFilters {
   keyword?: string;
   list_price_max?: number;
   list_price_min?: number;
+  "fuel_slugs[]"?: CDCFuelType;
+  "drivetrain_slugs[]"?: CDCDrivetrain;
+  "transmission_slugs[]"?: CDCTransmission;
+  "body_style_slugs[]"?: CDCBodystyle;
+  "exterior_color_slugs[]"?: string;
   "makes[]"?: string;
   "models[]"?: string;
-  "seller_type[]"?: "dealership" | "private_seller";
+  "seller_type[]"?: CDCSellerType;
   mileage_max?: number;
   monthly_payment?: number;
-  sort?: string;
+  sort?: CDCSortBy;
   stock_type?: string;
   year_max?: number;
   year_min?: number;
