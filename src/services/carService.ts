@@ -4,6 +4,8 @@ import craigslistFiltersParser from '../utils/clFiltersParser';
 import craigslistScraper from '../utils/craigslistScraper';
 import facebookFiltersParser from '../utils/fbFiltersParser';
 import facebookScraper from '../utils/facebookScraper';
+import carsDotComFiltersParser from '../utils/cdcFiltersParser';
+import carsDotComScraper from '../utils/carsDotComScraper';
 
 interface CarFilters {
   source?: string[];
@@ -15,6 +17,21 @@ interface CarFilters {
 
 /* TODO */
 
+export const fetchCarsDotComData = async (filters: DefaultCarFilters): Promise<FoundCar[]> => {
+  if (!filters.source?.includes('Cars.com') && filters.source) {
+    return [];
+  }
+
+  const parsedFilters = carsDotComFiltersParser(filters);
+
+  try {
+    return await carsDotComScraper(parsedFilters);
+  } catch (e) {
+    return [];
+  }
+
+};
+
 export const fetchCraigslistData = async (filters: DefaultCarFilters): Promise<FoundCar[]> => {
   if (!filters.source?.includes('Craigslist') && filters.source) {
     return [];
@@ -23,8 +40,6 @@ export const fetchCraigslistData = async (filters: DefaultCarFilters): Promise<F
   const parsedFilters = craigslistFiltersParser(filters);
   
   try {
-    console.log('location: ', parsedFilters.location);
-    
     return await craigslistScraper(parsedFilters);
   } catch (e) {
     if (parsedFilters.location) {

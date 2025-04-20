@@ -8,6 +8,7 @@ import { getCarAnalysis, getCarGeminiAnalysis } from '../services/aiService';
 import { FBCarItemScraper } from '../utils/FBCarItemScraper';
 import { CLCarItemScraper } from '../utils/CLCarItemScraper';
 import { Car, DefaultCarFilters } from '../interfaces';
+import { getZipCodeFromPlace } from '../utils/getZipCodeFromPlace';
 
 const router = Router();
 
@@ -25,10 +26,13 @@ router.get('/', (req: Request, res: Response) => {
  */
 router.post('/cars', async (req: Request, res: Response) => {
   try {
-    const filters: DefaultCarFilters = req.body;
-    console.log('filters: ', filters);
+    let filters: DefaultCarFilters = req.body;
+    /* console.log('filters: ', filters); */
 
     /* TODO */
+    const [city, state] = filters.location?.split(', ') || ['', ''];
+    filters.location = await getZipCodeFromPlace({city, state});
+  
     const [craigslistData, facebookData] = await Promise.all([
       fetchCraigslistData(filters),
       fetchFacebookData(filters)

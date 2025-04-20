@@ -1,44 +1,11 @@
 import { chromium, Page } from 'playwright';
-import { CLCarFilters, CLRVFilters, FoundCar as Car } from '../interfaces';
+import { CLCarFilters, CLRVFilters, FoundCar } from '../interfaces';
 import { E_RVType, EAutoBodyType, ECondition } from '../interfaces/craigslistTypes';
 import { writeFileSync } from 'fs';
 
 const CAR_ITEM_CLASS = '.cl-search-result';
 
-const removeDistanceFromCookies = (url: string): string => {
-  const cookies = url.split('?')[1].split('#')[0].split('&').filter((item) => !item.includes('search_distance'));
-  return cookies.join(`&`);
-}
-
-const gotoLocation = async (page: Page, location: string) => {
-  await page.waitForSelector(".cl-header .cl-left-group .cl-breadcrumb", { timeout: 6000 });
-  await page.click(".cl-header .cl-left-group .cl-breadcrumb");
-
-  await page.waitForSelector(".bd-for-bd-combo-box.bd-list-box.below div .items", { state: "attached", timeout: 6000 });
-
-  await page.waitForSelector(".bd-button.text-only.use-map.link-like span", { timeout: 6000 });
-  await page.click(".bd-button.text-only.use-map.link-like span")
-
-  await page.waitForSelector(".cl-clickable-scrim .cl-popup-panel.fit-to-content.in-box", { state: "attached", timeout: 6000 });
-
-  await page.waitForSelector("input[placeholder='city or zip/postal code']", { timeout: 6000 });
-  await page.fill("input[placeholder='city or zip/postal code']", location);
-
-  await page.keyboard.press('Backspace');
-  await page.keyboard.press(`${location.at(-1)}`);
-
-  await page.waitForSelector(".cl-search-dropdown-results", { state: "visible", timeout: 6000 });
-
-  await page.keyboard.press('Enter');
-  await page.waitForTimeout(4500);
-
-  await page.waitForSelector(".apply-button", { timeout: 6000 });
-  await page.click(".apply-button")
-
-  await page.waitForTimeout(1500);
-}
-
-const extractCarInfo = (elements: Element[]): Car[] => {
+const extractCarInfo = (elements: Element[]): FoundCar[] => {
   const selectors = {
     url: '.cl-gallery a',
     img: '.cl-gallery a img',
@@ -47,8 +14,6 @@ const extractCarInfo = (elements: Element[]): Car[] => {
     monthlyPayment: '.gallery-card span.priceinfo span.monthly-pmt',
     locationAndMileage: '.gallery-card .meta',
   };
-
-  console.log("is it working?");
 
   return elements.map((el) => {
     const url = el.querySelector(selectors.url)?.getAttribute('href');
@@ -81,7 +46,7 @@ const extractCarInfo = (elements: Element[]): Car[] => {
   );
 };
 
-const craigslistScraper = async (filters?: CLCarFilters | CLRVFilters): Promise<Car[]> => {
+const craigslistScraper = async (filters?: CLCarFilters | CLRVFilters): Promise<FoundCar[]> => {
   const cookies: string[] = [];
   let newFilters, carCategory ="cta";
   if (filters) {
@@ -110,15 +75,13 @@ const craigslistScraper = async (filters?: CLCarFilters | CLRVFilters): Promise<
     }
   }
   
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({ headless: false });
   const page = await browser.newPage();
 
-  await page.goto(`https://www.craigslist.org/search/${carCategory}`);
-  await gotoLocation(page, filters?.location ?? 'San Francisco, CA');
-  const newCookies = `${removeDistanceFromCookies(page.url())}&${cookies.join('&')}`;
-  await page.goto(`${page.url().split('?')[0]}?${newCookies}`);
+  const url = `https://www.craigslist.org/search/${carCategory}?${cookies.join('&')}`;
+  await page.goto(`${url}`, { waitUntil: 'domcontentloaded' });
 
-  await page.waitForSelector(CAR_ITEM_CLASS, { state: "attached", timeout: 120000 });
+  await page.waitForSelector(CAR_ITEM_CLASS, { state: "attached", timeout: 6000 });
 
   await page.waitForSelector(".scrolling-container", { timeout: 6000 });
   await page.hover(".scrolling-container")

@@ -13,7 +13,7 @@ export interface Car {
   exteriorColor?: string;
   price?: number;
   monthlyPayment?: number;
-  source?: 'Facebook' | 'Craigslist' | 'Ebay';
+  source?: 'Facebook' | 'Craigslist' | 'Cars.com';
   image?: string;
   mileage?: number;
   transmission?: string;
@@ -37,7 +37,7 @@ export interface Car {
 }
 
 export interface DefaultCarFilters {
-  source?: ('Facebook' | 'Craigslist')[];
+  source?: ('Facebook' | 'Craigslist' | 'Cars.com')[];
   location?: string;
   reversed_sort?: boolean;
 
@@ -46,6 +46,7 @@ export interface DefaultCarFilters {
   sellerType?: string;
   vehicleType?: string;
   bodyType?: string[];
+  fuelType?: string[];
   rv_type?: string[];
   minPrice?: number;
   maxPrice?: number;
@@ -61,21 +62,21 @@ export interface DefaultCarFilters {
 }
 
 export interface CarsDotComFilters {
-  zip?: number;
+  zip?: string;
   maximum_distance?: number;
   dealer_id?: number;
   include_shippable?: boolean;
   keyword?: string;
   list_price_max?: number;
   list_price_min?: number;
-  "fuel_slugs[]"?: CDCFuelType;
-  "drivetrain_slugs[]"?: CDCDrivetrain;
-  "transmission_slugs[]"?: CDCTransmission;
-  "body_style_slugs[]"?: CDCBodystyle;
+  "fuel_slugs[]"?: CDCFuelType[] | string[];
+  "drivetrain_slugs[]"?: CDCDrivetrain | string;
+  "transmission_slugs[]"?: CDCTransmission | string;
+  "body_style_slugs[]"?: CDCBodystyle[] | string[];
   "exterior_color_slugs[]"?: string;
-  "makes[]"?: string;
-  "models[]"?: string;
-  "seller_type[]"?: CDCSellerType;
+  "makes[]"?: string[];
+  "models[]"?: string[];
+  "seller_type[]"?: CDCSellerType | string;
   mileage_max?: number;
   monthly_payment?: number;
   sort?: CDCSortBy;

@@ -11,6 +11,7 @@ import {
   EAutoTitleStatus,
   E_RVType
 } from "../interfaces/craigslistTypes";
+import { getZipCodeFromPlace } from "./getZipCodeFromPlace";
 
 const extractValueFromEnum = (enumObject: any, enumValue: string) => {
   const enumobject = Object.values(enumObject);
@@ -105,7 +106,7 @@ const craigslistFiltersParser = (filters: DefaultCarFilters): CLCarFilters | CLR
       break;
   }
 
-  if (filters.location) newFilters.location = filters.location;
+  if (filters.location) newFilters.postal = filters.location;
   if (filters.minPrice) newFilters.min_price = filters.minPrice;
   if (filters.maxPrice) newFilters.max_price = filters.maxPrice;
   if (filters.minYear) newFilters.min_auto_year = filters.minYear;

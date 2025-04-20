@@ -14,7 +14,7 @@ export const getZipCodeFromPlace = async ({city, state}: {city: string, state: s
   return selectedPlace?.["post code"] || "00000";
 };
 
-(async() => {
-  console.log(await getZipCodeFromPlace({city: "North Attleboro", state: "MA"}))
+/* (async() => {
+  console.log(await getZipCodeFromPlace({city: "Nashua", state: "NH"}))
 }
-)()
+)() */
