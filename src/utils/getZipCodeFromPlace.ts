@@ -7,7 +7,7 @@ interface Place {
 
 export const getZipCodeFromPlace = async ({city, state}: {city: string, state: string}): Promise<string> => {
   const response = await fetch(`https://api.zippopotam.us/us/${state}/${city}`);
-  const {places}: {places: Place[]} = await response.json();
+  const {places}: {places: Place[]} = await response.json();  
   
   const selectedPlace = places.find(pl => pl["place name"] === city);
 

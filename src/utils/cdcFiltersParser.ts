@@ -19,6 +19,14 @@ const carsDotComFiltersParser =  (filters: DefaultCarFilters): CarsDotComFilters
     default:
       break;
   }
+  
+  switch (filters.sellerType) {
+    case 'dealer':
+      newFilters["seller_type[]"] = 'dealership';
+      break;
+    case 'private':
+      newFilters["seller_type[]"] = 'private_seller';
+  }
 
   if (filters.location) newFilters.zip = filters.location;
   if (filters.minPrice) newFilters.list_price_min = filters.minPrice;
@@ -26,13 +34,12 @@ const carsDotComFiltersParser =  (filters: DefaultCarFilters): CarsDotComFilters
   if (filters.minYear) newFilters.year_min = filters.minYear;
   if (filters.maxYear) newFilters.year_max = filters.maxYear;
   if (filters.maxMileage) newFilters.mileage_max = filters.maxMileage;
-  if (filters.fuelType) newFilters["fuel_slugs[]"] = filters.fuelType;
+  if (filters.fuelType) newFilters["fuel_slugs[]"] = filters.fuelType; /**/
   if (filters.bodyType) newFilters["body_style_slugs[]"] = filters.bodyType;
-  if (filters.transmission) newFilters["transmission_slugs[]"] = filters.transmission;
+  if (filters.transmission) newFilters["transmission_slugs[]"] = filters.transmission; /**/
   if (filters.color) newFilters["exterior_color_slugs[]"] = filters.color;
   if (filters.make) newFilters["makes[]"] = [filters.make];
   if (filters.model) newFilters["models[]"] = [filters.model];
-  if (filters.sellerType) newFilters["seller_type[]"] = filters.sellerType;
   
   return newFilters;
 }

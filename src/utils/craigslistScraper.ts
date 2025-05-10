@@ -15,6 +15,8 @@ const extractCarInfo = (elements: Element[]): FoundCar[] => {
     locationAndMileage: '.gallery-card .meta',
   };
 
+  const domparser = new DOMParser();
+
   return elements.map((el) => {
     const url = el.querySelector(selectors.url)?.getAttribute('href');
     const img = el.querySelector(selectors.img)?.getAttribute('src');
@@ -27,7 +29,9 @@ const extractCarInfo = (elements: Element[]): FoundCar[] => {
                                                                     .replace('<span class="separator"></span>', '·')
                                                                     .split('·');
 
+
     const mileage = metadata?.[1];
+    const location = domparser.parseFromString(metadata?.[2] ?? '<p></p>', 'text/html').body.textContent ?? '';
 
     newPrice = newPrice === 'Free' ? '$0' : newPrice;
 
@@ -38,7 +42,7 @@ const extractCarInfo = (elements: Element[]): FoundCar[] => {
       title: title ?? '',
       newPrice: newPrice ? Number(newPrice.replace('$', '').replace(',', '')) : 0,
       monthlyPayment: monthlyPayment ? Number(monthlyPayment.replace('$', '').replace(',', '').replace('/mo', '')) : undefined,
-      location: metadata?.[2] ?? '',
+      location,
       mileage: mileage ? Number(mileage.replace('mi', '').replace('k', '000')) : 0,
     };
   }).filter((car) => 

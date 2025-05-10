@@ -6,17 +6,19 @@ const extractCarInfo = (elements: Element[]): FoundCar[] => {
     const url = el.querySelector('a')?.getAttribute('href') || '';
     const image = el.querySelector('img.vehicle-image')?.getAttribute('src') || '';
     const title = el.querySelector('a.vehicle-card-link')?.textContent?.trim() || '';
-    const newPrice = el.querySelector('.price-section')?.textContent?.trim() || '';
+    let newPriceStr = el.querySelector('.price-section .primary-price')?.textContent?.trim() || '';
     const location = el.querySelector('.miles-from')?.textContent?.trim() || '';
     const mileage = el.querySelector('.mileage')?.textContent?.trim() || '';
 
+    const price = Number(newPriceStr.replace('$', '').replace(/,/g, ''))
+
     return {
       source: 'Cars.com',
-      url: url ?? '',
+      url: `https://www.cars.com${url}`,
       title: title ?? '',
-      newPrice: newPrice? Number(newPrice.replace('$', '').replace(/,/g, '')): 0,
+      newPrice: isNaN(price) ? 0 : price,
       location: location ?? '',
-      mileage: mileage ? Number(mileage.replace(' miles', '').replace(/,/g, '')) : 0,
+      mileage: mileage ? Number(mileage.replace(' mi.', '').replace(/,/g, '')) : 0,
       image: image ?? '',
     };
   });
@@ -44,21 +46,14 @@ const carsDotComScraper = async (filters: CarsDotComFilters): Promise<FoundCar[]
   }
 
   const browser = await chromium.launch({ headless: false });
-  const context = await browser.newContext();
-  const page = await context.newPage();
+  const page = await browser.newPage();
 
   const url = `https://www.cars.com/shopping/results/?${cookies.join('&')}`;
   await page.goto(url, { waitUntil: 'domcontentloaded' });
 
-  await page.waitForSelector('.vehicle-card', { state: 'attached', timeout: 350000 });
+  await page.screenshot({ path: 'cars-page.png', fullPage: true });
 
-  await page.hover('.vehicle-cards');
-  for (let i = 0; i < 7828; i += 466) {
-    await page.waitForTimeout(5);
-    await page.evaluate(() => {
-      window.scrollBy(0, 332);
-    });
-  }
+  await page.waitForSelector('.vehicle-card', { state: "attached", timeout: 6000 });
 
   let carLocator = page.locator('.vehicle-card');
   const elements = await carLocator.evaluateAll(extractCarInfo);

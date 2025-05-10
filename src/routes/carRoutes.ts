@@ -1,8 +1,8 @@
 import { Router, Request, Response } from 'express';
 import { 
   fetchCraigslistData, 
-  fetchFacebookData, 
-  combineAndSortData 
+  combineAndSortData, 
+  fetchCarsDotComData
 } from '../services/carService';
 import { getCarAnalysis, getCarGeminiAnalysis } from '../services/aiService';
 import { FBCarItemScraper } from '../utils/FBCarItemScraper';
@@ -33,14 +33,14 @@ router.post('/cars', async (req: Request, res: Response) => {
     const [city, state] = filters.location?.split(', ') || ['', ''];
     filters.location = await getZipCodeFromPlace({city, state});
   
-    const [craigslistData, facebookData] = await Promise.all([
+    const [craigslistData, carsDotComData] = await Promise.all([
       fetchCraigslistData(filters),
-      fetchFacebookData(filters)
+      fetchCarsDotComData(filters)
     ]);
 
     const combinedData = combineAndSortData(
       craigslistData, 
-      facebookData, 
+      carsDotComData, 
       filters.sort, 
       filters.reversed_sort
     );
